@@ -64,7 +64,7 @@ export class ObservableValue<T> extends Atom
         }
     }
 
-    private dehanceValue(value: T): T {
+    dehanceValue(value: T): T {
         if (this.dehancer !== undefined) return this.dehancer(value)
         return value
     }
@@ -87,7 +87,7 @@ export class ObservableValue<T> extends Atom
         }
     }
 
-    private prepareNewValue(newValue): T | IUNCHANGED {
+    prepareNewValue(newValue): T | IUNCHANGED {
         checkIfStateModificationsAreAllowed(this)
         if (hasInterceptors(this)) {
             const change = interceptChange<IValueWillChange<T>>(this, {

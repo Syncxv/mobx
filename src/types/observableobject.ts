@@ -77,8 +77,8 @@ export class ObservableObjectAdministration
     keysAtom: IAtom
     changeListeners
     interceptors
-    private proxy: any
-    private pendingKeys: undefined | Map<string, ObservableValue<boolean>>
+    proxy: any
+    pendingKeys: undefined | Map<string, ObservableValue<boolean>>
 
     constructor(
         public target: any,
@@ -145,7 +145,7 @@ export class ObservableObjectAdministration
         }
     }
 
-    private waitForKey(key: string) {
+    waitForKey(key: string) {
         const map = this.pendingKeys || (this.pendingKeys = new Map())
         let entry = map.get(key)
         if (!entry) {

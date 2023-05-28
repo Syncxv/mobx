@@ -79,9 +79,9 @@ export type IObservableMapInitialValues<K = any, V = any> =
 export class ObservableMap<K = any, V = any>
     implements Map<K, V>, IInterceptable<IMapWillChange<K, V>>, IListenable {
     [$mobx] = ObservableMapMarker
-    private _data: Map<K, ObservableValue<V>>
-    private _hasMap: Map<K, ObservableValue<boolean>> // hasMap, not hashMap >-).
-    private _keysAtom = createAtom(`${this.name}.keys()`)
+    _data: Map<K, ObservableValue<V>>
+    _hasMap: Map<K, ObservableValue<boolean>> // hasMap, not hashMap >-).
+    _keysAtom = createAtom(`${this.name}.keys()`)
     interceptors
     changeListeners
     dehancer: any
@@ -101,7 +101,7 @@ export class ObservableMap<K = any, V = any>
         this.merge(initialData)
     }
 
-    private _has(key: K): boolean {
+    _has(key: K): boolean {
         return this._data.has(key)
     }
 
@@ -168,7 +168,7 @@ export class ObservableMap<K = any, V = any>
         return false
     }
 
-    private _updateHasMapEntry(key: K, value: boolean): ObservableValue<boolean> {
+    _updateHasMapEntry(key: K, value: boolean): ObservableValue<boolean> {
         // optimization; don't fill the hasMap if we are not observing, or remove entry if there are no observers anymore
         let entry = this._hasMap.get(key)
         if (entry) {
@@ -180,7 +180,7 @@ export class ObservableMap<K = any, V = any>
         return entry
     }
 
-    private _updateValue(key: K, newValue: V | undefined) {
+    _updateValue(key: K, newValue: V | undefined) {
         const observable = this._data.get(key)!
         newValue = (observable as any).prepareNewValue(newValue) as V
         if (newValue !== UNCHANGED) {
@@ -204,7 +204,7 @@ export class ObservableMap<K = any, V = any>
         }
     }
 
-    private _addValue(key: K, newValue: V) {
+    _addValue(key: K, newValue: V) {
         checkIfStateModificationsAreAllowed(this._keysAtom)
         transaction(() => {
             const observable = new ObservableValue(
@@ -240,7 +240,7 @@ export class ObservableMap<K = any, V = any>
         return this.dehanceValue(undefined)
     }
 
-    private dehanceValue<X extends V | undefined>(value: X): X {
+    dehanceValue<X extends V | undefined>(value: X): X {
         if (this.dehancer !== undefined) {
             return this.dehancer(value)
         }
